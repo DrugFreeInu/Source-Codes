@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Rainbow Real Code Typing</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  height:100%;
+}
+
+body{
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  background:#050510;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+/* plain outside background */
+.scene{
+  position:relative;
+  width:min(980px,100vw);
+  height:min(650px,100vh);
+  overflow:hidden;
+  background:#050510;
+}
+
+/* tighter grey code panel */
+.editor{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(740px,92vw);
+  height:auto;
+  translate:-50% -50%;
+  z-index:15;
+  border-radius:22px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.035)),
+    #17171fee;
+  border:3px solid rgba(255,255,255,.22);
+  box-shadow:
+    inset 0 0 30px rgba(255,255,255,.06),
+    0 22px 46px rgba(0,0,0,.55);
+  overflow:hidden;
+}
+
+/* tighter code spacing */
+.code{
+  position:relative;
+  padding:22px 24px;
+  overflow:hidden;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  min-height:19px;
+  margin-bottom:5px;
+  gap:12px;
+  font-family:Consolas,Monaco,monospace;
+  font-size:clamp(10px,1.55vw,15px);
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.num{
+  width:30px;
+  flex:0 0 30px;
+  color:#ffffff55;
+  text-align:right;
+}
+
+.mask{
+  display:inline-block;
+  max-width:0;
+  overflow:hidden;
+  animation:typeLine 12s steps(var(--steps)) infinite;
+  animation-delay:var(--delay);
+}
+
+.text{
+  display:inline-block;
+  color:var(--line);
+  filter:
+    drop-shadow(0 0 7px var(--line))
+    drop-shadow(0 0 14px var(--line));
+}
+
+@keyframes typeLine{
+  0%{max-width:0;opacity:0}
+  4%{opacity:1}
+  20%{max-width:900px;opacity:1}
+  82%{max-width:900px;opacity:1}
+  100%{max-width:0;opacity:0}
+}
+
+.r1{--steps:15;--delay:0s;--line:#ff004c}
+.r2{--steps:6;--delay:.18s;--line:#ff4d00}
+.r3{--steps:6;--delay:.36s;--line:#ff8a00}
+.r4{--steps:24;--delay:.54s;--line:#ffe600}
+.r5{--steps:72;--delay:.72s;--line:#b6ff00}
+.r6{--steps:32;--delay:.9s;--line:#35ff6b}
+.r7{--steps:9;--delay:1.08s;--line:#00ffa2}
+.r8{--steps:67;--delay:1.26s;--line:#00eaff}
+.r9{--steps:44;--delay:1.44s;--line:#00a6ff}
+.r10{--steps:89;--delay:1.62s;--line:#5d5dff}
+.r11{--steps:60;--delay:1.8s;--line:#8a4dff}
+.r12{--steps:52;--delay:1.98s;--line:#b936ff}
+.r13{--steps:52;--delay:2.16s;--line:#d32cff}
+.r14{--steps:10;--delay:2.34s;--line:#ff2bd6}
+.r15{--steps:7;--delay:2.52s;--line:#ff4fa3}
+.r16{--steps:6;--delay:2.7s;--line:#ff6b6b}
+.r17{--steps:22;--delay:2.88s;--line:#ffb000}
+.r18{--steps:69;--delay:3.06s;--line:#fff06a}
+.r19{--steps:9;--delay:3.24s;--line:#7dff8a}
+.r20{--steps:7;--delay:3.42s;--line:#72ddff}
+.r21{--steps:7;--delay:3.6s;--line:#ffffff}
+
+.pop{
+  position:absolute;
+  z-index:20;
+  font-size:clamp(30px,5vw,68px);
+  font-weight:1000;
+  color:transparent;
+  background:linear-gradient(90deg,#ff004c,#ff8a00,#ffe600,#35ff6b,#00eaff,#d32cff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 24px #00eaff);
+  opacity:0;
+  animation:popSymbol 3.8s infinite ease-in-out;
+}
+
+.p1{left:70px;top:140px;animation-delay:.2s}
+.p2{right:80px;top:140px;animation-delay:.65s}
+.p3{left:100px;bottom:120px;animation-delay:1.1s}
+.p4{right:130px;bottom:120px;animation-delay:1.55s}
+
+.p1:before{content:"{}"}
+.p2:before{content:"</>"}
+.p3:before{content:"#"}
+.p4:before{content:"()"}
+
+@keyframes popSymbol{
+  0%{scale:.2;opacity:0;rotate:-12deg}
+  18%{scale:1.18;opacity:1;rotate:5deg}
+  72%{opacity:1}
+  100%{scale:.2;opacity:0;rotate:16deg}
+}
+
+@media(max-width:760px){
+  .editor{
+    width:92vw;
+  }
+
+  .code{
+    padding:18px 14px;
+  }
+
+  .row{
+    font-size:10px;
+    gap:8px;
+    margin-bottom:5px;
+  }
+
+  .num{
+    width:24px;
+    flex-basis:24px;
+  }
+
+  .pop{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+  <div class="scene">
+    <div class="pop p1"></div>
+    <div class="pop p2"></div>
+    <div class="pop p3"></div>
+    <div class="pop p4"></div>
+
+    <div class="editor">
+      <div class="code">
+        <div class="row r1"><span class="num">01</span><span class="mask"><span class="text">&lt;!doctype html&gt;</span></span></div>
+        <div class="row r2"><span class="num">02</span><span class="mask"><span class="text">&lt;html&gt;</span></span></div>
+        <div class="row r3"><span class="num">03</span><span class="mask"><span class="text">&lt;head&gt;</span></span></div>
+        <div class="row r4"><span class="num">04</span><span class="mask"><span class="text">  &lt;meta charset="UTF-8"&gt;</span></span></div>
+        <div class="row r5"><span class="num">05</span><span class="mask"><span class="text">  &lt;meta name="viewport" content="width=device-width,initial-scale=1.0"&gt;</span></span></div>
+        <div class="row r6"><span class="num">06</span><span class="mask"><span class="text">  &lt;title&gt;Rainbow Symbols&lt;/title&gt;</span></span></div>
+        <div class="row r7"><span class="num">07</span><span class="mask"><span class="text">  &lt;style&gt;</span></span></div>
+        <div class="row r8"><span class="num">08</span><span class="mask"><span class="text">    body{margin:0;display:grid;place-items:center;background:#050510;}</span></span></div>
+        <div class="row r9"><span class="num">09</span><span class="mask"><span class="text">    .realm{font-size:12vw;font-weight:900;}</span></span></div>
+        <div class="row r10"><span class="num">10</span><span class="mask"><span class="text">    .symbol{background:linear-gradient(90deg,red,orange,yellow,lime,cyan,blue,violet);}</span></span></div>
+        <div class="row r11"><span class="num">11</span><span class="mask"><span class="text">    .symbol{-webkit-background-clip:text;color:transparent;}</span></span></div>
+        <div class="row r12"><span class="num">12</span><span class="mask"><span class="text">    .symbol{filter:drop-shadow(0 0 22px cyan);}</span></span></div>
+        <div class="row r13"><span class="num">13</span><span class="mask"><span class="text">    @keyframes pop{50%{scale:1.12;rotate:4deg}}</span></span></div>
+        <div class="row r14"><span class="num">14</span><span class="mask"><span class="text">  &lt;/style&gt;</span></span></div>
+        <div class="row r15"><span class="num">15</span><span class="mask"><span class="text">&lt;/head&gt;</span></span></div>
+        <div class="row r16"><span class="num">16</span><span class="mask"><span class="text">&lt;body&gt;</span></span></div>
+        <div class="row r17"><span class="num">17</span><span class="mask"><span class="text">  &lt;main class="realm"&gt;</span></span></div>
+        <div class="row r18"><span class="num">18</span><span class="mask"><span class="text">    &lt;div class="symbol"&gt;&amp;lt;/&amp;gt; {} () # CSS HTML var(--glow);&lt;/div&gt;</span></span></div>
+        <div class="row r19"><span class="num">19</span><span class="mask"><span class="text">  &lt;/main&gt;</span></span></div>
+        <div class="row r20"><span class="num">20</span><span class="mask"><span class="text">&lt;/body&gt;</span></span></div>
+        <div class="row r21"><span class="num">21</span><span class="mask"><span class="text">&lt;/html&gt;</span></span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
