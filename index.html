@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DFI.codes Title Art</title>
+<title>DFI.codes</title>
+
 <style>
 html,body{
   margin:0;
@@ -12,92 +13,67 @@ html,body{
   overflow:hidden;
   background:
     radial-gradient(circle at top,#2d2d2d 0%,#111 45%,#050505 100%);
-  display:flex;
-  align-items:center;
-  justify-content:center;
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 
-.dfi-title{
+.page{
   width:100%;
+  height:100%;
+  display:grid;
+  grid-template-rows:auto 1fr;
+  place-items:center;
+  gap:18px;
+  padding:28px 18px 24px;
+}
+
+.dfi-title{
+  position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Consolas,
-    monospace;
-
   font-size:clamp(42px,8vw,120px);
   font-weight:900;
   letter-spacing:-0.06em;
   line-height:1;
-
   color:#f6f2eb;
-
   white-space:nowrap;
-
   text-shadow:
     0 0 8px rgba(255,255,255,.12),
     0 0 24px rgba(255,255,255,.08),
     0 0 60px rgba(160,120,255,.12);
-
-  transform:
-    skewX(-8deg)
-    rotate(-2deg);
+  transform:skewX(-8deg) rotate(-2deg);
+  z-index:2;
 }
 
-.title::before{
+.dfi-title::before{
   content:"";
   position:absolute;
   inset:-22px -34px;
   border-radius:28px;
-
   background:
     linear-gradient(
       135deg,
       rgba(255,255,255,.06),
       rgba(120,90,255,.04)
     );
-
   border:1px solid rgba(255,255,255,.08);
-
   backdrop-filter:blur(6px);
   -webkit-backdrop-filter:blur(6px);
-
   z-index:-1;
-
   box-shadow:
     0 0 40px rgba(0,0,0,.45),
     inset 0 1px 0 rgba(255,255,255,.08);
 }
 
-.title span{
+.dfi-title span{
   display:inline-block;
 }
 
-.bracket{
-  color:#7df7c5;
-}
-
-.arrow{
-  color:#7dc7ff;
-}
-
-.domain{
-  color:#fff7d1;
-}
-
-.colon{
-  color:#ff9ccf;
-}
-
-.dot{
-  color:#ffdf70;
-}
+.bracket{color:#7df7c5}
+.arrow{color:#7dc7ff}
+.domain{color:#fff7d1}
+.colon{color:#ff9ccf}
+.dot{color:#ffdf70}
 
 .glow{
   position:absolute;
@@ -113,21 +89,57 @@ html,body{
   z-index:-2;
   filter:blur(50px);
 }
+
+/* ide.html display */
+.ide-frame{
+  width:min(980px,100%);
+  height:min(650px,calc(100vh - 170px));
+  border:0;
+  border-radius:24px;
+  overflow:hidden;
+  background:#050510;
+  box-shadow:
+    0 26px 60px rgba(0,0,0,.65),
+    0 0 45px rgba(0,234,255,.18),
+    0 0 70px rgba(255,0,150,.12);
+}
+
+@media(max-width:760px){
+  .page{
+    gap:12px;
+    padding:18px 10px;
+  }
+
+  .dfi-title{
+    font-size:clamp(36px,10vw,72px);
+  }
+
+  .ide-frame{
+    width:100%;
+    height:calc(100vh - 120px);
+    border-radius:18px;
+  }
+}
 </style>
 </head>
-<body>
-<div class="dfi-title">
-  <div class="glow"></div>
 
-  <span class="bracket">{</span>
-  <span class="arrow">&lt;</span>
-  <span class="colon">:</span>
-  <span class="domain">DFI</span>
-  <span class="dot">.</span>
-  <span class="domain">codes</span>
-  <span class="colon">:</span>
-  <span class="arrow">&gt;</span>
-  <span class="bracket">}</span>
-</div>
+<body>
+  <div class="page">
+    <div class="dfi-title">
+      <div class="glow"></div>
+
+      <span class="bracket">{</span>
+      <span class="arrow">&lt;</span>
+      <span class="colon">:</span>
+      <span class="domain">DFI</span>
+      <span class="dot">.</span>
+      <span class="domain">codes</span>
+      <span class="colon">:</span>
+      <span class="arrow">&gt;</span>
+      <span class="bracket">}</span>
+    </div>
+
+    <iframe class="ide-frame" src="ide.html"></iframe>
+  </div>
 </body>
 </html>
