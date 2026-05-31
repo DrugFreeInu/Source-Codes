@@ -67,13 +67,52 @@ body{
   font-size:clamp(10px,1.55vw,15px);
   font-weight:900;
   white-space:nowrap;
+  border-radius:10px;
+  transition:
+    background .16s ease,
+    box-shadow .16s ease,
+    transform .16s ease;
 }
 
+/* swipe/select line numbers */
 .num{
   width:30px;
   flex:0 0 30px;
   color:#ffffff55;
   text-align:right;
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:none;
+  border-radius:8px;
+  padding:2px 4px;
+  transition:
+    color .16s ease,
+    background .16s ease,
+    box-shadow .16s ease,
+    transform .16s ease;
+}
+
+.num.active-num{
+  color:#fff;
+  background:rgba(255,255,255,.14);
+  box-shadow:
+    0 0 10px rgba(255,255,255,.45),
+    0 0 18px var(--line);
+  transform:scale(1.08);
+}
+
+.row.selected-code-line{
+  background:rgba(255,255,255,.055);
+  box-shadow:
+    inset 3px 0 0 var(--line),
+    0 0 18px rgba(255,255,255,.12);
+}
+
+.row.selected-code-line .text{
+  filter:
+    drop-shadow(0 0 9px var(--line))
+    drop-shadow(0 0 22px var(--line));
 }
 
 .mask{
@@ -213,5 +252,122 @@ body{
       </div>
     </div>
   </div>
+
+<script>
+const selectedCodeLines = new Set();
+
+function updateSelectedCodeLines(){
+  const rows = [...document.querySelectorAll(".row")];
+
+  rows.forEach((row,index)=>{
+    const line = index + 1;
+    const selected = selectedCodeLines.has(line);
+    const num = row.querySelector(".num");
+
+    row.classList.toggle("selected-code-line", selected);
+
+    if(num){
+      num.classList.toggle("active-num", selected);
+    }
+  });
+}
+
+function enableLineNumberSwipe(){
+  const nums = [...document.querySelectorAll(".num")];
+
+  let active = false;
+  let mode = "add";
+  let touched = new Set();
+  let pointerId = null;
+
+  function getLineFromNum(num){
+    const row = num.closest(".row");
+    if(!row) return null;
+
+    const rows = [...document.querySelectorAll(".row")];
+    return rows.indexOf(row) + 1;
+  }
+
+  function numFromPoint(x,y){
+    const el = document.elementFromPoint(x,y);
+    if(!el) return null;
+    return el.closest(".num");
+  }
+
+  function applyNum(num){
+    if(!num) return;
+
+    const line = getLineFromNum(num);
+    if(!line) return;
+
+    if(touched.has(line)) return;
+    touched.add(line);
+
+    if(mode === "remove"){
+      selectedCodeLines.delete(line);
+    }else{
+      selectedCodeLines.add(line);
+    }
+
+    updateSelectedCodeLines();
+  }
+
+  nums.forEach(num=>{
+    num.addEventListener("pointerdown",e=>{
+      e.preventDefault();
+      e.stopPropagation();
+
+      const line = getLineFromNum(num);
+      if(!line) return;
+
+      active = true;
+      pointerId = e.pointerId;
+      touched = new Set();
+      mode = selectedCodeLines.has(line) ? "remove" : "add";
+
+      num.setPointerCapture(e.pointerId);
+      applyNum(num);
+    });
+
+    num.addEventListener("pointermove",e=>{
+      if(!active || e.pointerId !== pointerId) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      applyNum(numFromPoint(e.clientX,e.clientY));
+    });
+
+    num.addEventListener("pointerup",e=>{
+      if(e.pointerId !== pointerId) return;
+
+      active = false;
+      pointerId = null;
+      touched = new Set();
+
+      try{
+        num.releasePointerCapture(e.pointerId);
+      }catch(err){}
+    });
+
+    num.addEventListener("pointercancel",e=>{
+      active = false;
+      pointerId = null;
+      touched = new Set();
+
+      try{
+        num.releasePointerCapture(e.pointerId);
+      }catch(err){}
+    });
+
+    num.addEventListener("click",e=>{
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  });
+}
+
+enableLineNumberSwipe();
+</script>
 </body>
 </html>
